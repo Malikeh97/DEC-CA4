@@ -1,0 +1,24 @@
+Mdi:ArrangeIcons
+Mdi:ArrangeIcons
+Mdi:ArrangeIcons
+ScopeSigMgr:loadpffile //Mac/Home/Desktop/malikeh/UT-Courses/Digital_Elec/CAs/DEC-CA4/sr_latch.tr0 1 openonly
+# PF:1
+pf:read PF:1 v(q)
+# WF:1:1
+Graph addsignal WF:1:1 -region new -yview real(y) -xview real(x) -tracehi 2
+# Signal0
+pf:read PF:1 v(r)
+# WF:1:2
+Graph addsignal WF:1:2 -region new -yview real(y) -xview real(x) -tracehi 2
+# Signal1
+pf:read PF:1 v(s)
+# WF:1:3
+Graph addsignal WF:1:3 -region new -yview real(y) -xview real(x) -tracehi 2
+# Signal2
+pf:read PF:1 v(clk)
+# WF:1:4
+Graph addsignal WF:1:4 -region new -yview real(y) -xview real(x) -tracehi 2
+# Signal3
+Mdi:Resize 549 454
+Mdi:Move 5 5
+Mdi:ArrangeIcons

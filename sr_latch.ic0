@@ -1,0 +1,27 @@
+* "simulator" "HSPICE" 
+* "version" "A-2008.03 32-BIT"
+* "format" "HSP"
+* "rundate" "01:11:13 12/22/2018 "
+* "netlist" "\\mac\home\desktop\malikeh\ut-courses\digital_elec\cas\dec-ca4\sr_latch.sp "
+* "runtitle" "******** digital electronics, clocked sr latch design*******"
+* time =    0.            
+* temperature =   25.0000        
+*** BEGIN: Saved Operating Point ***                     
+.option 
++ gmindc=   1.0000p       
+.nodeset
++ clk =   0.            
++ q =  82.4688u       
++ qb = 999.7824m       
++ r =   0.            
++ s =   0.            
++ vs =   1.0000        
++ y1 = 142.1542u       
++ y2 = 141.0858u       
++ xand1.k = 999.9931m       
++ xand1.s = 160.6437m       
++ xand2.k = 999.9931m       
++ xand2.s = 160.6437m       
++ xnor1.d = 999.8912m       
++ xnor2.d = 188.0274m       
+***   END: Saved Operating Point ***                     

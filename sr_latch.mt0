@@ -1,0 +1,4 @@
+$DATA1 SOURCE='HSPICE' VERSION='A-2008.03 32-BIT'
+.TITLE '******** digital electronics, clocked sr latch design*******'
+ t_rise           t_fall           temper           alter#            
+  4.604e-10        3.617e-10         25.0000           1.0000         

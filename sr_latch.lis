@@ -1,0 +1,309 @@
+ ****** HSPICE -- A-2008.03 32-BIT (Feb 26 2008) winnt ******                   
+  Copyright (C) 2008 Synopsys, Inc. All Rights Reserved.                        
+  Unpublished-rights reserved under US copyright laws.
+  This program is protected by law and is subject to the 
+  terms and conditions of the license agreement found in:
+    C:\synopsys\Hspice_A-2008.03\license.warn
+  Use of this program is your acceptance to be bound by this 
+  license agreement. HSPICE is the trademark of Synopsys, Inc.
+  Input File: \\mac\home\desktop\malikeh\ut-courses\digital_elec\cas\dec-ca4\sr_
+ Init: read install configuration file: C:\synopsys\Hspice_A-2008.03\meta.cfg
+ Init: hspice initialization file: C:\synopsys\Hspice_A-2008.03\hspice.ini
+
+
+
+
+
+ ********* params*******
+ .param			lmin=32n
+ +vdd=1v
+ .global  vdd
+
+
+ ****** sources ******
+ vinc				clk		0		pulse	  0	vdd	2n	50p	50p	2n 4n
+ vsupply			vs		0		dc		  vdd
+ vins				s		  0		pulse      0 vdd  3n 50ps 50p 2n 1000ns
+ vinr				r		  0		pulse   0 vdd  5n 50ps 50p 2n 1000ns
+
+ ****** subckt and ******
+ .subckt andgate x y gnd  supply out
+ mp2				k		  x	 supply 	 supply		  pmos		l='lmin'		w='lmin*2'
+ mp1				k		  y	 supply		 supply		  pmos		l='lmin'		w='lmin*2'
+ mn1       s     x  gnd       gnd        nmos    l='lmin'    w='lmin*2'
+ mn2       k     y  s         s          nmos    l='lmin'    w='lmin*2'
+ c1        k     gnd   10f
+
+ mp3				out		  k	 supply 	 supply		 pmos		 l='lmin'		w='lmin*2'
+ mn3       out     k   gnd     gnd     nmos   l='lmin'    w='lmin'
+ c2        out     gnd   5f
+
+ .ends andgate
+
+ ****** subckt nor ******
+ .subckt norgate x y gnd  supply out
+ mp1				d		  x	  supply 	 supply		  pmos		l='lmin'		w='lmin*4'
+ mp2				out		  y	  d		     d		    pmos		l='lmin'		w='lmin*4'
+ mn1       out     x   gnd     gnd       nmos    l='lmin'    w='lmin'
+ mn2       out     y   gnd     gnd       nmos    l='lmin'    w='lmin'
+ c3        out     gnd   10f
+ .ends norgate
+
+ ****** main circuit *****
+ xand1  s  clk  0 vs y1 andgate
+ xand2  clk  r  0 vs y2 andgate
+ xnor1  y1 q  0 vs qb norgate
+ xnor2  qb y2 0 vs q  norgate
+
+
+ *********type of analysis***
+ .measure tran t_rise
+ + trig v(q) val = '0.1*vdd'  rise = 1
+ + targ v(q) val = '0.9*vdd'  rise = 1
+
+ .measure tran t_fall
+ + trig v(q) val = '0.9*vdd'  fall = 1
+ + targ v(q) val = '0.1*vdd'  fall = 1
+
+
+
+ .tran  0.1ns  20ns
+ .op
+ .end
+
+ ***********************************************************************
+ ** runlvl is invoked, you can disable it by:
+      a) Add option runlvl=0 to your current simulation job.
+      b) Copy $installdir/hspice.ini to your HOME directory and
+         customize it by adding option runlvl=0, which disables
+         it for all of your simulation jobs.
+      c) Re-invoke $installdir/bin/config program and unselect the
+         option runlvl setting in box 'hspice.ini' which disables
+         it for whole group simulation jobs.
+
+ ** runlvl is invoked, some options are ignored or automatically set:
+      Options below are automatically set(user setting will overwrite them):
+      if runlvl=6,            .option bypass=0
+      if runlvl=[1|2|3|4|5],  .option bypass=2
+
+      Options below are ignored, they are replaced by automated algorithms:
+        lvltim    dvdt      ft    fast   trtol  absvar  relvar
+          relq  chgtol    dvtr    imin    itl3    rmax
+
+ ** runlvl is invoked, actual option value used by HSPICE are:
+       runlvl= 3       bypass= 2      mbypass=   2.00   bytol= 100.00u
+ ***********************************************************************
+
+1****** HSPICE -- A-2008.03 32-BIT (Feb 26 2008) winnt ******                   
+ ******  
+ ******** digital electronics, clocked sr latch design*******                   
+  ******  circuit name directory                                                
+ ******  
+ circuit number to circuit name directory
+   number circuitname                     definition         multiplier
+        0 main circuit
+        1 xand1.                          andgate            1.00 
+        2 xand2.                          andgate            1.00 
+        3 xnor1.                          norgate            1.00 
+        4 xnor2.                          norgate            1.00 
+
+ **warning** dc voltage reset to initial transient source value
+             in source        0:vinc                new dc=  0.0000D+00
+
+
+ **warning** dc voltage reset to initial transient source value
+             in source        0:vins                new dc=  0.0000D+00
+
+
+ **warning** dc voltage reset to initial transient source value
+             in source        0:vinr                new dc=  0.0000D+00
+
+ ** warning** associated with encrypted blocks were suppressed
+
+ 
+      
+  Opening plot unit= 79
+ file=\\mac\home\desktop\malikeh\ut-courses\digital_elec\cas\dec-ca4\sr_latch.p
+
+
+ **diagnostic** dc convergence failure, 
+ resetting dcon option to 1 and retrying
+
+ **diagnostic** dc convergence successful
+ you can increase the efficiency of the
+ operating point calculation by setting dcon= 1
+ in the .option statement
+1****** HSPICE -- A-2008.03 32-BIT (Feb 26 2008) winnt ******                   
+ ******  
+ ******** digital electronics, clocked sr latch design*******                   
+  ******  operating point information      tnom=  25.000 temp=  25.000          
+ ******  
+ ***** operating point status is all       simulation time is     0.     
+    node    =voltage      node    =voltage      node    =voltage
+
+ +0:clk     =   0.      0:q       =  82.4688u 0:qb      = 999.7824m
+ +0:r       =   0.      0:s       =   0.      0:vs      =   1.0000 
+ +0:y1      = 142.1542u 0:y2      = 141.0858u 1:k       = 999.9931m
+ +1:s       = 160.6437m 2:k       = 999.9931m 2:s       = 160.6437m
+ +3:d       = 999.8912m 4:d       = 188.0274m
+
+
+ ****  voltage sources
+
+ subckt                                              
+ element  0:vinc     0:vsupply  0:vins     0:vinr    
+  volts      0.         1.0000     0.         0.     
+  current  331.4411p  -66.7163n    7.7134p  323.7277p
+  power      0.        66.7163n    0.         0.     
+
+     total voltage source power dissipation=   66.7163n       watts
+
+
+
+
+ **** mosfets
+
+
+ subckt   xand1      xand1      xand1      xand1      xand1      xand1     
+ element  1:mp2      1:mp1      1:mn1      1:mn2      1:mp3      1:mn3     
+ model    0:pmos     0:pmos     0:nmos     0:nmos     0:pmos     0:nmos    
+ region       Linear     Linear     Cutoff     Cutoff     Cutoff     Linear
+  id      -481.0560p -481.0560p  206.4111p  206.6565p  -18.8191n   19.1819n
+  ibs     -3.576e-26 -3.576e-26  1.600e-25  7.964e-25 -9.506e-25  8.637e-27
+  ibd        9.5617a    9.5617a -170.6244f -849.3494f    1.0099p -197.3319a
+  vgs       -1.0000    -1.0000     0.      -160.6437m   -6.8830u  999.9931m
+  vds       -6.8830u   -6.8830u  160.6437m  839.3494m -999.8578m  142.1542u
+  vbs        0.         0.         0.         0.         0.         0.     
+  vth     -430.8277m -430.8277m  459.5295m  310.0987m -161.4182m  494.8672m
+  vdsat   -425.8518m -425.8518m   39.4792m   38.2542m  -46.9899m  267.2032m
+  vod     -569.1723m -569.1723m -459.5295m -470.7424m  161.4113m  505.1259m
+  beta     150.7351u  150.7351u    2.9001m    3.5269m  236.1024u  852.0492u
+  gam eff  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m
+  gm       564.5921p  564.5921p    4.7643n    4.7733n  406.5708n   10.2042n
+  gds       69.8901u   69.8901u    1.1624n    1.1296n  139.7252n  134.9110u
+  gmb      179.4505p  179.4505p    1.3369n    1.3469n   83.8105n    3.8143n
+  cdtot     80.2346a   80.2346a   47.3508a   38.7628a   37.9791a   36.1048a
+  cgtot     70.5212a   70.5212a   42.0894a   34.9701a   37.3969a   28.3739a
+  cstot     77.7543a   77.7543a   71.4239a   68.0307a   71.4012a   35.8766a
+  cbtot     87.2386a   87.2386a   86.3452a   82.6859a   81.1105a   43.4811a
+  cgs       40.9640a   40.9640a   20.3264a   16.9333a   20.3195a   15.7671a
+  cgd       28.9473a   28.9473a   16.9331a   12.6056a   12.5250a   12.2181a
+
+
+
+ subckt   xand2      xand2      xand2      xand2      xand2      xand2     
+ element  2:mp2      2:mp1      2:mn1      2:mn2      2:mp3      2:mn3     
+ model    0:pmos     0:pmos     0:nmos     0:nmos     0:pmos     0:nmos    
+ region       Linear     Linear     Cutoff     Cutoff     Cutoff     Linear
+  id      -481.0566p -481.0566p  206.4111p  206.6565p  -18.8193n   19.0377n
+  ibs     -3.576e-26 -3.576e-26  1.600e-25  7.964e-25 -9.509e-25  8.636e-27
+  ibd        9.5617a    9.5617a -170.6244f -849.3494f    1.0099p -195.8499a
+  vgs       -1.0000    -1.0000     0.      -160.6437m   -6.8830u  999.9931m
+  vds       -6.8830u   -6.8830u  160.6437m  839.3494m -999.8589m  141.0858u
+  vbs        0.         0.         0.         0.         0.         0.     
+  vth     -430.8277m -430.8277m  459.5295m  310.0987m -161.4179m  494.8675m
+  vdsat   -425.8518m -425.8518m   39.4792m   38.2542m  -46.9899m  267.2032m
+  vod     -569.1723m -569.1723m -459.5295m -470.7424m  161.4110m  505.1256m
+  beta     150.7351u  150.7351u    2.9001m    3.5269m  236.1026u  852.0491u
+  gam eff  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m
+  gm       564.5929p  564.5929p    4.7643n    4.7733n  406.5739n   10.1275n
+  gds       69.8901u   69.8901u    1.1624n    1.1296n  139.7264n  134.9114u
+  gmb      179.4507p  179.4507p    1.3369n    1.3469n   83.8112n    3.7857n
+  cdtot     80.2346a   80.2346a   47.3508a   38.7628a   37.9791a   36.1049a
+  cgtot     70.5212a   70.5212a   42.0894a   34.9701a   37.3969a   28.3739a
+  cstot     77.7543a   77.7543a   71.4239a   68.0307a   71.4012a   35.8766a
+  cbtot     87.2386a   87.2386a   86.3452a   82.6859a   81.1105a   43.4811a
+  cgs       40.9640a   40.9640a   20.3264a   16.9333a   20.3195a   15.7670a
+  cgd       28.9473a   28.9473a   16.9331a   12.6056a   12.5250a   12.2182a
+
+
+
+ subckt   xnor1      xnor1      xnor1      xnor1      xnor2      xnor2     
+ element  3:mp1      3:mp2      3:mn1      3:mn2      4:mp1      4:mp2     
+ model    0:pmos     0:pmos     0:nmos     0:nmos     0:pmos     0:pmos    
+ region       Linear     Linear     Cutoff     Cutoff     Cutoff     Cutoff
+  id       -16.3626n  -16.3468n    7.8298n    7.8194n  -10.7658n  -10.7697n
+  ibs     -7.852e-26 -7.841e-26  9.491e-25  9.491e-25 -7.709e-25 -1.857e-25
+  ibd      151.0953a  150.9578a   -1.0098p   -1.0098p  821.9726f  197.9383f
+  vgs     -999.8578m -999.8087m  142.1542u   82.4688u -217.5540u -187.8863m
+  vds     -108.8265u -108.7274u  999.7824m  999.7824m -811.9726m -187.9449m
+  vbs        0.         0.         0.         0.         0.         0.     
+  vth     -430.8003m -430.8003m  274.7762m  274.7762m -212.0438m -380.1879m
+  vdsat   -426.7005m -426.6720m   37.8671m   37.8669m  -46.0533m  -47.0258m
+  vod     -569.0576m -569.0084m -274.6340m -274.6937m  211.8262m  192.3016m
+  beta     329.4082u  329.4144u    1.5014m    1.5014m  472.4709u  366.2460u
+  gam eff  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m  400.0000m
+  gm        18.9263n   18.9105n  173.6335n  173.4088n  241.3025n  238.8177n
+  gds      150.3427u  150.3342u   41.8034n   41.7492n   74.8429n   73.3317n
+  gmb        6.0129n    6.0076n   41.6555n   41.6037n   51.5750n   49.7096n
+  cdtot    169.3818a  169.3805a   17.8600a   17.8600a   80.5133a  104.6308a
+  cgtot    153.7174a  153.7169a   15.5786a   15.5781a   81.8273a  103.9473a
+  cstot    160.4630a  160.4632a   33.8327a   33.8322a  146.4970a  153.2606a
+  cbtot    174.8704a  174.8704a   40.4320a   40.4320a  164.3533a  171.1939a
+  cgs       89.5219a   89.5216a    8.2849a    8.2844a   44.3110a   51.0846a
+  cgd       63.2448a   63.2445a    5.1354a    5.1354a   27.9377a   44.2503a
+
+
+
+ subckt   xnor2      xnor2     
+ element  4:mn1      4:mn2     
+ model    0:nmos     0:nmos    
+ region       Linear     Cutoff
+  id        11.1278n  116.3237f
+  ibs      8.524e-27  1.074e-28
+  ibd     -114.5165a -114.5165a
+  vgs      999.7824m  141.0858u
+  vds       82.4688u   82.4688u
+  vbs        0.         0.     
+  vth      494.8804m  494.8804m
+  vdsat    267.1125m   39.6028m
+  vod      504.9021m -494.7393m
+  beta     852.1405u    1.1267m
+  gam eff  400.0000m  400.0000m
+  gm         5.9228n    2.6902p
+  gds      134.9178u    1.4094n
+  gmb        2.2136n  781.3883f
+  cdtot     36.1078a   24.2492a
+  cgtot     28.3738a   18.7227a
+  cstot     35.8745a   33.8311a
+  cbtot     43.4815a   43.6751a
+  cgs       15.7659a    8.2824a
+  cgd       12.2192a    8.2816a
+
+
+
+ ******  
+ ******** digital electronics, clocked sr latch design*******                   
+  ******  transient analysis               tnom=  25.000 temp=  25.000          
+ ******  
+   t_rise=  4.6039E-10  targ=  4.0143E-09   trig=  3.5539E-09
+   t_fall=  3.6169E-10  targ=  6.6954E-09   trig=  6.3337E-09
+
+          ***** job concluded
+1****** HSPICE -- A-2008.03 32-BIT (Feb 26 2008) winnt ******                   
+ ******  
+ ******** digital electronics, clocked sr latch design*******                   
+  ******  job statistics summary           tnom=  25.000 temp=  25.000          
+ ******  
+
+           total memory used        351 kbytes
+
+  # nodes =      95 # elements=      30
+  # diodes=       0 # bjts    =       0 # jfets   =       0 # mosfets =      20
+  # va device =       0
+
+    analysis           time    # points   tot. iter  conv.iter
+
+    op point           0.03           1         242
+    transient          0.14         201         662         228 rev=        20
+    readin             0.01
+    errchk             0.00
+    setup              0.02
+    output             0.00
+           total cpu time          0.22 seconds
+           total elapsed time         1 seconds
+               job started at  01:11:13 12/22/2018
+               job ended   at  01:11:14 12/22/2018
+
+
+ Init: hspice initialization file: C:\synopsys\Hspice_A-2008.03\hspice.ini
